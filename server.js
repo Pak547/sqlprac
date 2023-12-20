@@ -13,21 +13,48 @@ const db = mysql.createConnection({
   console.log("Connected to the employee database."
   ));
 
-function mainMenu() {
-  const { choice } = inquirer.prompt({
+async function mainMenu() {
+  const { choice } =  await inquirer.prompt({
     name: "choice",
     type: "list",
     message: "What would you like to do?",
     choices: [
-      "View all departments", viewDept(),
-      "View all roles", viewRoles(),
-      "View all employees", viewEmployees(),
-      "Add a department", addDept(),
-      "Add a role", addRole(),
-      "Add an employee", addEmployee(),
-      "Update an employee role", updateEmployeeRole(),
-      "Quit", quit(),
+      "View all departments",
+      "View all roles",
+      "View all employees",
+      "Add a department",
+      "Add a role",
+      "Add an employee",
+      "Update an employee role",
+      "Quit",
     ]
+  }).then((input) => {
+    switch (input.choice) {
+      case "View all departments":
+        viewDept();
+        break;
+      case "View all roles":
+        viewRoles();
+        break;
+      case "View all employees":
+        viewEmployees();
+        break;
+      case "Add a new department":
+        addDept();
+        break;
+      case "Add a new role":
+        addRole();
+        break;
+      case "Add an employee":
+        addEmployee();
+        break;
+      case "Update an employee role":
+        updateEmployeeRole();
+        break;
+      case "Quit":
+        startApp();
+        break;
+    }
   })
 };
 
