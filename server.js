@@ -1,23 +1,17 @@
 const inquirer = require("inquirer");
-const mysql = require("mysql2");
 const dotenv = require('dotenv');
+const mysql = require("mysql2");
 dotenv.config();
 
-async function connectToDatabase() {
-  try {
-      const connection = await mysql.createConnection({
-          host: process.env.DB_HOST,
-          port: process.env.DB_PORT,
-          user: process.env.DB_USER,
-          password: process.env.DB_PASSWORD,
-          database: process.env.DB_DATABASE,
-      });
-      console.log("Connected to database");
-  } catch (err) {
-      console.error('Error connecting to the database:', err);
-      process.exit(1);
-  };
-};
+const db = mysql.createConnection({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+},
+  console.log("Connected to the employee database."
+  ));
 
 function mainMenu() {
   const { choice } = inquirer.prompt({
@@ -33,21 +27,27 @@ function mainMenu() {
       "Add an employee", addEmployee(),
       "Update an employee role", updateEmployeeRole(),
       "Quit", quit(),
-    ]})};
+    ]
+  })
+};
 
 function viewDept() {
   db.query("SELECT id AS department_id, name AS department_name FROM department;", function (err, res) {
-     err ? console.log(err) : console.table(res), startApp();
-    })}
+    // ternary operator
+    err ? console.log(err) : console.table(res), startApp();
+  })
+}
 function viewRoles() {
   db.query("SELECT id AS role_id, title, salary, department_id FROM role;", function (err, res) {
-     err ? console.log(err) : console.table(res), startApp();
-    })}
+    err ? console.log(err) : console.table(res), startApp();
+  })
+}
 
 function viewEmployees() {
   db.query("SELECT id AS employee_id, first_name, last_name, role_id, manager_id FROM employee;", function (err, res) {
-     err ? console.log(err) : console.table(res), startApp();
-    })}
+    err ? console.log(err) : console.table(res), startApp();
+  })
+}
 function addDept() {
   inquirer.prompt({
     name: "department_name",
@@ -56,7 +56,9 @@ function addDept() {
   }).then(function (answer) {
     db.query("INSERT INTO department (name) VALUES (?)", [answer.department_name], function (err, res) {
       err ? console.log(err) : console.table(res), startApp();
-    })})}
+    })
+  })
+}
 function addRole() {
   inquirer.prompt([{
     name: "title",
@@ -75,7 +77,9 @@ function addRole() {
   }]).then(function (answer) {
     db.query("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [answer.title, answer.salary, answer.department_id], function (err, res) {
       err ? console.log(err) : console.table(res), startApp();
-    })})}
+    })
+  })
+}
 function addEmployee() {
 
   inquirer.prompt([{
@@ -109,8 +113,10 @@ function addEmployee() {
     db.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [answer.first_name, answer.last_name, answer.role_id, answer.manager_id], function (err, res) {
       err ? console.log(err) : console.table(res), startApp();
     }
-    )}
-  )}
+    )
+  }
+  )
+}
 function updateEmployeeRole() {
   inquirer.prompt([{
     name: "employee_id",
@@ -124,7 +130,9 @@ function updateEmployeeRole() {
   }]).then(function (answer) {
     db.query("UPDATE employee SET role_id = ? WHERE id = ?", [answer.role_id, answer.employee_id], function (err, res) {
       err ? console.log(err) : console.table(res), startApp();
-    })})}
+    })
+  })
+}
 function quit() {
   db.end();
   process.exit();
@@ -141,9 +149,8 @@ function startApp() {
     } else {
       quit();
     }
-  })}
-connectToDatabase();
-
+  })
+}
 
 
 mainMenu();
