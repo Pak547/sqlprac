@@ -1,6 +1,6 @@
-const inquirer = require("inquirer");
-const dotenv = require('dotenv');
 const mysql = require("mysql2");
+const dotenv = require('dotenv');
+const inquirer = require("inquirer");
 dotenv.config();
 
 const db = mysql.createConnection({
@@ -9,15 +9,8 @@ const db = mysql.createConnection({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
 },
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err);
-    return;
-  }
-  console.log('Connected to the employee database.');
-}));
-
-
+  console.log(`Connected to the employee database.`)
+);
 
 async function mainMenu() {
    await inquirer.prompt({
@@ -114,30 +107,25 @@ function addRole() {
   })
 }
 function addEmployee() {
-
   inquirer.prompt([{
-
     name: "first_name",
     type: "input",
     message: "What is the first name of the employee you would like to add?",
   },
 
   {
-
     name: "last_name",
     type: "input",
     message: "What is the last name of the employee you would like to add?",
   },
 
   {
-
     name: "role_id",
     type: "input",
     message: "What is the role id of the employee you would like to add?",
   },
 
   {
-
     name: "manager_id",
     type: "input",
     message: "What is the manager id of the employee you would like to add?",
@@ -184,6 +172,5 @@ function startApp() {
     }
   })
 }
-
 
 mainMenu();
