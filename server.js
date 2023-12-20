@@ -9,8 +9,15 @@ const db = mysql.createConnection({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
 },
-  console.log("Connected to the employee database."
-  ));
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to the database:', err);
+    return;
+  }
+  console.log('Connected to the employee database.');
+}));
+
+
 
 async function mainMenu() {
    await inquirer.prompt({
