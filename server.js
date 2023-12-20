@@ -14,7 +14,7 @@ const db = mysql.createConnection({
   ));
 
 async function mainMenu() {
-  const { choice } =  await inquirer.prompt({
+   await inquirer.prompt({
     name: "choice",
     type: "list",
     message: "What would you like to do?",
